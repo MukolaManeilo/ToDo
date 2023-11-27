@@ -23,7 +23,7 @@ namespace ToDo.Models
 
         [Required]
         [Column("title")]
-        [MaxLength(15)]
+        [MaxLength(30)]
         [MinLength(3)]
         public string Title { get; set; }
 
