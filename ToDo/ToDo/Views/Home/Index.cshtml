@@ -38,7 +38,7 @@
                             </a>
                         </div>
                         <div class="column is-narrow">
-                            <a class="@(item.Status == "Done" ? "button is-primary" : "button")" style="width: 40px; height: 40px" asp-controller="Tasks" asp-action="ChangeStatus" asp-route-taskId="@item.Id" asp-route-newStatus="@(item.Status == "Done" ? "InProgress" : "Done")">
+                            <a class="@(item.Status == Status.StatusType.Done ? "button is-primary" : "button")" style="width: 40px; height: 40px" asp-controller="Tasks" asp-action="ChangeStatus" asp-route-taskId="@item.Id" asp-route-newStatus="@(item.Status == Status.StatusType.Done ? "InProgress" : "Done")">
                             </a>
                         </div>
                     </div>

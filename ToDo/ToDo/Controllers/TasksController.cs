@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
 using ToDo.Data;
 using ToDo.Models;
 
@@ -39,8 +40,8 @@ namespace ToDo.Controllers
 
             Tasks tasks = new(
                 HttpContext.Request.Form["Title"],
-                HttpContext.Request.Form["Theme"],
-                "InProgress",
+                (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), HttpContext.Request.Form["Theme"]),
+                Status.StatusType.InProgress,
                 HttpContext.Request.Form["Content"]
                 );
 
@@ -69,8 +70,8 @@ namespace ToDo.Controllers
             Tasks tasks = new(
                 int.Parse(HttpContext.Request.Form["Id"]),
                 HttpContext.Request.Form["Title"],
-                HttpContext.Request.Form["Theme"],
-                HttpContext.Request.Form["Status"],
+                (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), HttpContext.Request.Form["Theme"]),
+                (Status.StatusType)Enum.Parse(typeof(Status.StatusType), HttpContext.Request.Form["Status"]),
                 DateTime.Parse(HttpContext.Request.Form["CreatedAt"]),
                 HttpContext.Request.Form["Content"]
                 );
@@ -98,7 +99,7 @@ namespace ToDo.Controllers
         public async Task<IActionResult> ChangeStatus(int taskId, string newStatus)
         {
             Tasks tasks = await _context.Tasks.FindAsync(taskId);
-            tasks.Status = newStatus;
+            tasks.Status = (Status.StatusType)Enum.Parse(typeof(Status.StatusType), newStatus) ;
 
             if (tasks != null)
                 _context.Tasks.Update(tasks);

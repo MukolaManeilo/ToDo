@@ -7,7 +7,7 @@ namespace ToDo.Models
 {
     public class Tasks
     {
-        public Tasks(string Title, string Theme, string Status, string Content)
+        public Tasks(string Title, Theme.ThemeType Theme, Status.StatusType Status, string Content)
         {
             this.Title = Title;
             this.Theme = Theme;
@@ -16,7 +16,7 @@ namespace ToDo.Models
             this.Content = Content;
         }
 
-        public Tasks(int Id, string Title, string Theme, string Status, DateTime? CreatedAt, string Content)
+        public Tasks(int Id, string Title, Theme.ThemeType Theme, Status.StatusType Status, DateTime? CreatedAt, string Content)
         {
             this.Id = Id;
             this.Title = Title;
@@ -41,14 +41,12 @@ namespace ToDo.Models
 
         [Required]
         [Column("theme")]
-        [MaxLength(200)]
-        [MinLength(3)]
-        public string Theme { get; set; }
+        public Theme.ThemeType Theme { get; set; }
 
 
         [Required]
         [Column("status")]
-        public string Status { get; set; }
+        public Status.StatusType Status { get; set; }
 
 
         [Column("created_at")]
