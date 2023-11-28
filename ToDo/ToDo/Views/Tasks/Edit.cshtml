@@ -20,8 +20,16 @@
                 </div>
             </div>
             <div class="field">
+                <label class="label">Theme</label>
                 <div class="control">
-                    <input class="input" asp-for="Theme" type="text" >
+                    <input list="theme" class="input" asp-for="Theme" type="text">
+                    <datalist id="theme">
+                        <option value="None"></option>
+                        <option value="Work"></option>
+                        <option value="Study"></option>
+                        <option value="Housework"></option>
+                        <option value="Other"></option>
+                    </datalist>
                 </div>
             </div>
             <input type="hidden" asp-for="Status" />

@@ -37,7 +37,8 @@ namespace ToDo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create()
         {
-
+            if(HttpContext.Request.Form["Theme"] == String.Empty)
+                return RedirectToAction("Create");
             Tasks tasks = new(
                 HttpContext.Request.Form["Title"],
                 (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), HttpContext.Request.Form["Theme"]),
@@ -56,9 +57,9 @@ namespace ToDo.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int taskId)
+        public async Task<IActionResult> Edit(int taskId)
         {
-            Tasks tasks = _context.Tasks.First(user => user.Id == taskId);
+            Tasks tasks =  await _context.Tasks.FindAsync(taskId);
             return View(tasks);
         }
 
@@ -67,6 +68,8 @@ namespace ToDo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit()
         {
+            if (HttpContext.Request.Form["Theme"] == String.Empty)
+                return RedirectToAction("Edit");
             Tasks tasks = new(
                 int.Parse(HttpContext.Request.Form["Id"]),
                 HttpContext.Request.Form["Title"],
