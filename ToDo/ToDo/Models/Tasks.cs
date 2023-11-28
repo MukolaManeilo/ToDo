@@ -16,6 +16,16 @@ namespace ToDo.Models
             this.Content = Content;
         }
 
+        public Tasks(int Id, string Title, string Theme, string Status, DateTime? CreatedAt, string Content)
+        {
+            this.Id = Id;
+            this.Title = Title;
+            this.Theme = Theme;
+            this.Status = Status;
+            this.CreatedAt = CreatedAt;
+            this.Content = Content;
+        }
+
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

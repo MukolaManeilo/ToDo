@@ -22,36 +22,16 @@ namespace ToDo.Controllers
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tasks.ToListAsync());
+            return _context.Tasks != null ?
+                        View(await _context.Tasks.ToListAsync()) :
+                        Problem("Entity set 'ASPNETCoreContext.Tasks'  is null.");
         }
 
-        // GET: Tasks/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tasks = await _context.Tasks
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tasks == null)
-            {
-                return NotFound();
-            }
-
-            return View(tasks);
-        }
-
-        // GET: Tasks/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Tasks/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Theme,CreatedAt,Content")] Tasks tasks)
@@ -65,33 +45,16 @@ namespace ToDo.Controllers
             return View(tasks);
         }
 
-        // GET: Tasks/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tasks = await _context.Tasks.FindAsync(id);
-            if (tasks == null)
-            {
-                return NotFound();
-            }
-            return View(tasks);
-        }
 
         // POST: Tasks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Theme,CreatedAt,Content")] Tasks tasks)
+        public async Task<IActionResult> Edit()
         {
-            if (id != tasks.Id)
-            {
-                return NotFound();
-            }
+            Tasks tasks = new Tasks(int.Parse(HttpContext.Request.Form["Id"]), HttpContext.Request.Form["Title"], HttpContext.Request.Form["Theme"], HttpContext.Request.Form["Status"],DateTime.Parse(HttpContext.Request.Form["CreatedAt"]), HttpContext.Request.Form["Content"]);
+
 
             if (ModelState.IsValid)
             {

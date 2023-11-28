@@ -19,5 +19,12 @@ namespace ToDo.Controllers
             List<Tasks> tasks = _context.Tasks.ToList();
             return View(tasks);
         }
-    }
+
+        [HttpGet]
+		public IActionResult Editor(int taskId)
+		{
+            Tasks tasks = _context.Tasks.First(user => user.Id == taskId);
+			return View(tasks);
+		}
+	}
 }
