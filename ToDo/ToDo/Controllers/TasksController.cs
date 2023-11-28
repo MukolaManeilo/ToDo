@@ -19,7 +19,6 @@ namespace ToDo.Controllers
             _context = context;
         }
 
-        // GET: Tasks
         public async Task<IActionResult> Index()
         {
             return _context.Tasks != null ?
@@ -27,34 +26,54 @@ namespace ToDo.Controllers
                         Problem("Entity set 'ASPNETCoreContext.Tasks'  is null.");
         }
 
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult Create(int? taskId)
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Theme,CreatedAt,Content")] Tasks tasks)
+        public async Task<IActionResult> Create()
         {
+
+            Tasks tasks = new(
+                HttpContext.Request.Form["Title"],
+                HttpContext.Request.Form["Theme"],
+                "InProgress",
+                HttpContext.Request.Form["Content"]
+                );
+
             if (ModelState.IsValid)
             {
                 _context.Add(tasks);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(tasks);
         }
 
 
-        // POST: Tasks/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpGet]
+        public IActionResult Edit(int taskId)
+        {
+            Tasks tasks = _context.Tasks.First(user => user.Id == taskId);
+            return View(tasks);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit()
         {
-            Tasks tasks = new Tasks(int.Parse(HttpContext.Request.Form["Id"]), HttpContext.Request.Form["Title"], HttpContext.Request.Form["Theme"], HttpContext.Request.Form["Status"],DateTime.Parse(HttpContext.Request.Form["CreatedAt"]), HttpContext.Request.Form["Content"]);
-
+            Tasks tasks = new(
+                int.Parse(HttpContext.Request.Form["Id"]),
+                HttpContext.Request.Form["Title"],
+                HttpContext.Request.Form["Theme"],
+                HttpContext.Request.Form["Status"],
+                DateTime.Parse(HttpContext.Request.Form["CreatedAt"]),
+                HttpContext.Request.Form["Content"]
+                );
 
             if (ModelState.IsValid)
             {
@@ -66,50 +85,26 @@ namespace ToDo.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TasksExists(tasks.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Home");
             }
             return View(tasks);
         }
 
-        // GET: Tasks/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int taskId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var tasks = await _context.Tasks.FindAsync(taskId);
 
-            var tasks = await _context.Tasks
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tasks == null)
-            {
-                return NotFound();
-            }
-
-            return View(tasks);
-        }
-
-        // POST: Tasks/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tasks = await _context.Tasks.FindAsync(id);
             if (tasks != null)
-            {
                 _context.Tasks.Remove(tasks);
-            }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool TasksExists(int id)
