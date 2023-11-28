@@ -94,6 +94,18 @@ namespace ToDo.Controllers
             return View(tasks);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatus(int taskId, string newStatus)
+        {
+            Tasks tasks = await _context.Tasks.FindAsync(taskId);
+            tasks.Status = newStatus;
+
+            if (tasks != null)
+                _context.Tasks.Update(tasks);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int taskId)

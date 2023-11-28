@@ -12,80 +12,40 @@
     </div>
     @foreach (var item in Model)
     {
-        @if (item.Status == "InProgress")
-        {
-            <div class="columns is-mobile">
-                <div class="column is-half is-offset-one-quarter" style="min-width: 700px">
-                    <div class="box">
-                        <div class="columns">
-                            <div class="column is-narrow">
-                                <a class="subtitle is-4">
-                                    @item.Title
-                                </a>
-                            </div>
-                            <div class="column"></div>
-                            <div class="column is-narrow">
-                                <a class="subtitle is-4">
-                                    @item.Theme
-                                </a>
-                            </div>
-                            <div class="column is-narrow">
-                                <a asp-controller="Tasks" asp-action="Edit" asp-route-taskId="@item.Id">
-                                    <button class="button is-info is-outlined">Edit</button>
-                                </a>
-                            </div>
-                            <div class="column is-narrow">
-                                <a asp-controller="Tasks" asp-action="Delete" asp-route-taskId="@item.Id">
-                                    <button class="button is-danger is-outlined">Delete</button>
-                                </a>
-                            </div>
-                            <div class="column is-narrow">
-                                <label class="checkbox">
-                                    <input type="checkbox" style="width: 20px; height: 20px; margin: 10px 0px 10px 0px">
-                                </label>
-                            </div>
+        <div class="columns is-mobile">
+            <div class="column is-half is-offset-one-quarter" style="min-width: 700px">
+                <div class="box">
+                    <div class="columns">
+                        <div class="column is-narrow">
+                            <a class="subtitle is-4">
+                                @item.Title
+                            </a>
                         </div>
-                        <hr style="margin-top: 0" />
-                        <label class="subtitle is-5">@item.Content</label>
-                    </div>
-                </div>
-            </div>
-        }
-    }
-    <div style="height: 50px"></div>
-    @foreach (var item in Model)
-    {
-        @if (item.Status == "Done")
-        {
-            <div class="columns is-mobile">
-                <div class="column is-half is-offset-one-quarter" style="min-width: 700px">
-                    <div class="box">
-                        <div class="columns">
-                            <div class="column is-narrow">
-                                <a class="subtitle is-4">
-                                    @item.Title
-                                </a>
-                            </div>
-                            <div class="column"></div>
-                            <div class="column is-narrow">
-                                <a class="subtitle is-4">
-                                    @item.Theme
-                                </a>
-                            </div>
-                            <div class="column is-narrow">
+                        <div class="column"></div>
+                        <div class="column is-narrow">
+                            <a class="subtitle is-4">
+                                @item.Theme
+                            </a>
+                        </div>
+                        <div class="column is-narrow">
+                            <a asp-controller="Tasks" asp-action="Edit" asp-route-taskId="@item.Id">
+                                <button class="button is-info is-outlined">Edit</button>
+                            </a>
+                        </div>
+                        <div class="column is-narrow">
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-taskId="@item.Id">
                                 <button class="button is-danger is-outlined">Delete</button>
-                            </div>
-                            <div class="column is-narrow">
-                                <label class="checkbox">
-                                    <input type="checkbox" style="width: 20px; height: 20px; margin: 10px 0px 10px 0px" checked>
-                                </label>
-                            </div>
+                            </a>
                         </div>
-                        <hr style="margin-top: 0" />
-                        <label class="subtitle is-5">@item.Content</label>
+                        <div class="column is-narrow">
+                            <a class="@(item.Status == "Done" ? "button is-primary" : "button")" style="width: 40px; height: 40px" asp-controller="Tasks" asp-action="ChangeStatus" asp-route-taskId="@item.Id" asp-route-newStatus="@(item.Status == "Done" ? "InProgress" : "Done")">
+                            </a>
+                        </div>
                     </div>
+                    <hr style="margin-top: 0" />
+                    <label class="subtitle is-5">@item.Content</label>
                 </div>
             </div>
-        }
+        </div>
     }
 </div>
