@@ -5,6 +5,49 @@
 <div>
     <div class="columns is-mobile">
         <div class="column is-half is-offset-one-quarter" style="min-width: 700px">
+            <form method="post" asp-action="Index">
+				<div class="columns">
+                    <div class="column">
+                        <div class="box" style="padding: 0">
+                            <input list="sorting" name="sorting" class="input" value="@Context.Request.Query["sorting"]" type="text">
+                            <datalist id="sorting">
+                                <option value="FirstInProgress"></option>
+                                <option value="DateAdded"></option>
+                                <option value="Alphabet"></option>
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="box" style="padding: 0">
+                            <input list="status" name="status" class="input" value="@Context.Request.Query["status"]" type="text">
+                            <datalist id="status">
+                                <option value="AllStatus"></option>
+                                <option value="InProgress"></option>
+                                <option value="Done"></option>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="box" style="padding: 0">
+                            <input list="theme" name="theme" class="input" value="@Context.Request.Query["theme"]" type="text">
+                            <datalist id="theme">
+                                <option value="None"></option>
+                                <option value="Work"></option>
+                                <option value="Study"></option>
+                                <option value="Housework"></option>
+                                <option value="Other"></option>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="box" style="padding: 0">
+                            <input type="submit" value="Update" style="width: 100%" class="button">
+                        </div>
+                    </div>
+
+				</div>
+			</form>
             <a asp-controller="Tasks" asp-action="Create">
                 <button class="button is-success is-outlined" style="margin: 0; width: 100%">Create</button>
             </a>
@@ -49,3 +92,9 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
