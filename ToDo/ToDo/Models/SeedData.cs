@@ -15,10 +15,9 @@ namespace ToDo.Models
                 else 
                 {
                     context.Tasks.AddRange(
-                    new Tasks("Сomplete TT", Theme.ThemeType.Work, Status.StatusType.Done, "Сomplete the technical task for the ASP.NET developer position and pass the interview"),
-                    new Tasks("Example done task", Theme.ThemeType.Study, Status.StatusType.InProgress, "test text, test text, test text, test text"),
-                    new Tasks("Example inProgress task", Theme.ThemeType.None, Status.StatusType.Done, "test text, test text, test text, test text, test text, test text, test text, test text, test text, test text, test text, test text")
-                    
+                    new Tasks("Сomplete TT", Theme.ThemeType.Work, Status.StatusType.Done, "Сomplete the technical task for the ASP.NET developer position"),
+                    new Tasks("Interview", Theme.ThemeType.Work, Status.StatusType.InProgress, "Get an interview for the ASP.NET developer position"),
+                    new Tasks("Start working", Theme.ThemeType.Work, Status.StatusType.InProgress, "Start working on an interesting product")
                     );
                     context.SaveChanges();
                 }
