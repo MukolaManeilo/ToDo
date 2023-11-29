@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mono.TextTemplating;
 using ToDo.Data;
 using ToDo.Models;
 
@@ -20,12 +14,6 @@ namespace ToDo.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return _context.Tasks != null ?
-                        View(await _context.Tasks.ToListAsync()) :
-                        Problem("Entity set 'ASPNETCoreContext.Tasks'  is null.");
-        }
 
         [HttpGet]
         public IActionResult Create(int? taskId)
@@ -33,17 +21,26 @@ namespace ToDo.Controllers
             return View();
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create([FromForm] string Title, [FromForm] string Theme, [FromForm] string Content)
         {
-            if(HttpContext.Request.Form["Theme"] == String.Empty)
+            if (Title == null || Theme == null || Content == null)
                 return RedirectToAction("Create");
+
+            Theme.ThemeType defaultThemeType = Models.Theme.ThemeType.Other;
+            //Validity check
+            if (Enum.TryParse(Theme, out Theme.ThemeType theme))
+                theme = (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), Theme);
+            else
+                theme = defaultThemeType;
+
             Tasks tasks = new(
-                HttpContext.Request.Form["Title"],
-                (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), HttpContext.Request.Form["Theme"]),
+                Title,
+                theme,
                 Status.StatusType.InProgress,
-                HttpContext.Request.Form["Content"]
+                Content
                 );
 
             if (ModelState.IsValid)
@@ -66,17 +63,25 @@ namespace ToDo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit()
+        public async Task<IActionResult> Edit([FromForm] string Id, [FromForm] string Title, [FromForm] string? Theme, [FromForm] string Status, [FromForm] string CreatedAt, [FromForm] string Content)
         {
-            if (HttpContext.Request.Form["Theme"] == String.Empty)
+            if (Theme == null)
                 return RedirectToAction("Edit");
+
+            Theme.ThemeType defaultThemeType = Models.Theme.ThemeType.Other;
+            //Validity check
+            if (Enum.TryParse(Theme, out Theme.ThemeType theme))
+                theme = (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), Theme);
+            else
+                theme = defaultThemeType;
+
             Tasks tasks = new(
-                int.Parse(HttpContext.Request.Form["Id"]),
-                HttpContext.Request.Form["Title"],
-                (Theme.ThemeType)Enum.Parse(typeof(Theme.ThemeType), HttpContext.Request.Form["Theme"]),
-                (Status.StatusType)Enum.Parse(typeof(Status.StatusType), HttpContext.Request.Form["Status"]),
-                DateTime.Parse(HttpContext.Request.Form["CreatedAt"]),
-                HttpContext.Request.Form["Content"]
+                int.Parse(Id),
+                Title,
+                theme,
+                (Status.StatusType)Enum.Parse(typeof(Status.StatusType), Status),
+                DateTime.Parse(CreatedAt),
+                Content
                 );
 
             if (ModelState.IsValid)
@@ -98,6 +103,7 @@ namespace ToDo.Controllers
             return View(tasks);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int taskId, string newStatus)
         {
@@ -111,6 +117,7 @@ namespace ToDo.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Delete(int taskId)
         {
@@ -122,6 +129,7 @@ namespace ToDo.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
+
 
         private bool TasksExists(int id)
         {

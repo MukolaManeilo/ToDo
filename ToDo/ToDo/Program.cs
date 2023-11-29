@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using ToDo.Data;
 using ToDo.Models;
 
@@ -18,6 +17,12 @@ using (var scope = app.Services.CreateScope())
 
     SeedData.Initialize(services);
 }
+app.UseCsp(options =>
+{
+    options.DefaultSources(s => s.Self());
+    options.StyleSources(s => s.Self().UnsafeInline());
+    options.ScriptSources(s => s.Self().UnsafeInline());
+});
 
 app.UseStaticFiles();
 

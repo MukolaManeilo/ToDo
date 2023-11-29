@@ -10,7 +10,7 @@
 
 <div class="columns is-mobile">
     <div class="column is-half is-offset-one-quarter">
-        <form class="box" asp-action="Edit">
+        <form method="post" class="box" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
             <div class="field">
