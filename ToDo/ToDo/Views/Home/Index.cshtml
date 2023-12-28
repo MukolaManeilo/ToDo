@@ -8,6 +8,8 @@
             <form method="post" asp-action="Index">
 				<div class="columns">
                     <div class="column">
+
+                        <p>Sorting</p>
                         <div class="box" style="padding: 0">
                             <input list="sorting" name="sorting" class="input" value="@Context.Request.Query["sorting"]" type="text">
                             <datalist id="sorting">
@@ -19,6 +21,8 @@
                     </div>
 
                     <div class="column">
+
+                        <p>Status</p>
                         <div class="box" style="padding: 0">
                             <input list="status" name="status" class="input" value="@Context.Request.Query["status"]" type="text">
                             <datalist id="status">
@@ -29,6 +33,7 @@
                         </div>
                     </div>
                     <div class="column">
+                        <p>Theme</p>
                         <div class="box" style="padding: 0">
                             <input list="theme" name="theme" class="input" value="@Context.Request.Query["theme"]" type="text">
                             <datalist id="theme">
@@ -41,6 +46,7 @@
                         </div>
                     </div>
                     <div class="column">
+                        <br />
                         <div class="box" style="padding: 0">
                             <input type="submit" value="Update" style="width: 100%" class="button">
                         </div>
